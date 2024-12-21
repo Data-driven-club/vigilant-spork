@@ -1,0 +1,39 @@
+name: Process Large Data File
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'  # Ejemplo: Ejecuta cada lunes a las 00:00 UTC
+
+jobs:
+  process-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyspark pandas
+
+      - name: Download and compress the data
+        run: |
+          wget -O data.gz <URL_DEL_ARCHIVO>
+          gzip -t data.gz  # Verifica la integridad del archivo comprimido
+
+      - name: Process data with PySpark
+        run: |
+          python process_data.py
+
+      - name: Upload processed data artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: processed-data
+          path: processed_data.csv
