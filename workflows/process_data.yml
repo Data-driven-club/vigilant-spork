@@ -25,7 +25,7 @@ jobs:
 
       - name: Download and compress the data
         run: |
-          wget -O data.gz <URL_DEL_ARCHIVO>
+          wget -O data.gz https://fs.datosabiertos.mef.gob.pe/datastorefiles/2024-Gasto-Diario.csv
           gzip -t data.gz  # Verifica la integridad del archivo comprimido
 
       - name: Process data with PySpark
